@@ -1,4 +1,5 @@
-const cardsArray = [    
+const body = document.querySelector("body");
+let cardsArray = [    
     '&#128525;','&#128525;',
     '&#128561;','&#128561;',
     '&#128564;','&#128564;',
@@ -18,15 +19,10 @@ cards.forEach(function(card) {
         card.classList.add("flipped");
         const inner = card.querySelector(".inner");
         const index = indicesOfFlippedCards[numberOfFlippedCards] = inner.attributes.value.value;
-        // const front = inner.querySelector(".front");
         const back = inner.querySelector(".back");
         back.innerHTML = cardsArray[index];
-        // console.log(back.style.transform);
         back.style.transform = "none";
         numberOfFlippedCards++;
-        // setTimeout(() => {
-        //     isTwoCardsFlipped() ? (isMatchFound() ? resetVariables() : noMatch()) : null;
-        // }, 2000);
         isTwoCardsFlipped() ? (isMatchFound() ? resetVariables() : setTimeout(() => {noMatch()}, 2000)) : null;
     })
 })
@@ -56,3 +52,38 @@ const getCardByIndex = (index) => getCardInnerByIndex(index).parentElement;
 const getCardInnerByIndex = (index) => document.querySelector(`[value="${index}"]`);
 
 const getCardBackByIndex = (index) => getCardInnerByIndex(index).querySelector(".back");
+
+
+/* Adding 'Randomize Board' button */
+const div = document.createElement("div");
+div.style.display = "flex";
+div.style.justifyContent = "center";
+const randomizeBoardButton = document.createElement("button");
+randomizeBoardButton.classList.add("button");
+randomizeBoardButton.innerText = "Randomize Board";
+
+div.append(randomizeBoardButton);
+body.append(div);
+
+randomizeBoardButton.addEventListener("click", function(event) {
+    let newCardArray = [];
+    while(cardsArray.length > 0) {
+        const index = Math.floor(Math.random() * cardsArray.length);
+        newCardArray.push(cardsArray[index]);
+        cardsArray = cardsArray.toSpliced(index, 1);
+    }
+    cardsArray = newCardArray;
+
+    const cards = document.querySelectorAll(".card");
+    cards.forEach(function(card) {
+            if (card.classList.contains("flipped")) {
+                card.classList.toggle("flipped");
+            }
+            const inner = card.querySelector(".inner");
+            const index = indicesOfFlippedCards[numberOfFlippedCards] = inner.attributes.value.value;
+            const back = inner.querySelector(".back");
+            back.innerHTML = "";
+            back.style.transform = "rotateY(180deg)";
+            resetVariables();
+    })
+})
