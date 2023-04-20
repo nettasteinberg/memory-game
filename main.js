@@ -9,7 +9,9 @@ let cardsArray = [
 
 let numberOfFlippedCards = 0;
 let indicesOfFlippedCards = [-1, -2];
-let score = 0;
+const playersScores = [0, 0];
+let playerTurn = 0;
+// let score = 0;
 
 const cards = document.querySelectorAll(".card");
 cards.forEach(function(card) {
@@ -34,13 +36,17 @@ const isMatchFound =() => contentOfCard(indicesOfFlippedCards[0]) === contentOfC
 
 const matchFound = () => {
     resetVariables();
-    score++;
+    playersScores[playerTurn]++;
     refreshScore();
 }
 
 const refreshScore = () => {
-    const scoreP = document.querySelector('.score')
-    scoreP.innerHTML = `Score: ${score}`;
+    // debugger
+    const playerScores = Array.prototype.slice.call(document.querySelectorAll('.score'));
+    for (let i = 0; i < playerScores.length; i++) {
+        playerScores[i].innerHTML = `Player ${i+1} score: ${playersScores[i]}`;
+    }
+   
 }
 
 const resetVariables = function() {
@@ -55,6 +61,7 @@ const noMatch = function() {
         getCardBackByIndex(index).style.transform = "rotateY(180deg)";
     })
     resetVariables();
+    playerTurn = playerTurn === 0 ? 1 : 0;
 }
 
 const contentOfCard = (index) => getCardBackByIndex(index).innerHTML;
@@ -98,18 +105,24 @@ randomizeBoardButton.addEventListener("click", function(event) {
             back.style.transform = "rotateY(180deg)";
             resetVariables();
     })
-    score = 0;
+    for (let i = 0; i < playersScores.length; i++) {
+        playersScores[i] = 0;
+    }
     refreshScore();
+    playerTurn = 0;
 })
 
 
 /* Adding Score */
 const scoreDiv = document.createElement("div");
 scoreDiv.style.display = "flex";
-scoreDiv.style.justifyContent = "center";
-const scoreP = document.createElement("p");
-scoreP.classList.add("score");
-scoreP.innerHTML = `Score: ${score}`;
+scoreDiv.style.justifyContent = "space-around";
+const scorePlayer1 = document.createElement("p");
+scorePlayer1.classList.add("score");
+scorePlayer1.innerHTML = `Player 1 score: ${playersScores[0]}`;
+const scorePlayer2 = document.createElement("p");
+scorePlayer2.classList.add("score");
+scorePlayer2.innerHTML = `Player 2 score: ${playersScores[1]}`;
 
-scoreDiv.append(scoreP);
+scoreDiv.append(scorePlayer1, scorePlayer2);
 body.append(scoreDiv);
