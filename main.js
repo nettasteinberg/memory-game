@@ -9,6 +9,7 @@ let cardsArray = [
 
 let numberOfFlippedCards = 0;
 let indicesOfFlippedCards = [-1, -2];
+let score = 0;
 
 const cards = document.querySelectorAll(".card");
 cards.forEach(function(card) {
@@ -23,13 +24,24 @@ cards.forEach(function(card) {
         back.innerHTML = cardsArray[index];
         back.style.transform = "none";
         numberOfFlippedCards++;
-        isTwoCardsFlipped() ? (isMatchFound() ? resetVariables() : setTimeout(() => {noMatch()}, 2000)) : null;
+        isTwoCardsFlipped() ? (isMatchFound() ? matchFound() : setTimeout(() => {noMatch()}, 1500)) : null;
     })
 })
 
 isTwoCardsFlipped = () => indicesOfFlippedCards[0] >=0 && indicesOfFlippedCards[1] >=0;
 
 const isMatchFound =() => contentOfCard(indicesOfFlippedCards[0]) === contentOfCard(indicesOfFlippedCards[1]);
+
+const matchFound = () => {
+    resetVariables();
+    score++;
+    refreshScore();
+}
+
+const refreshScore = () => {
+    const scoreP = document.querySelector('.score')
+    scoreP.innerHTML = `Score: ${score}`;
+}
 
 const resetVariables = function() {
     numberOfFlippedCards = 0;
@@ -86,4 +98,18 @@ randomizeBoardButton.addEventListener("click", function(event) {
             back.style.transform = "rotateY(180deg)";
             resetVariables();
     })
+    score = 0;
+    refreshScore();
 })
+
+
+/* Adding Score */
+const scoreDiv = document.createElement("div");
+scoreDiv.style.display = "flex";
+scoreDiv.style.justifyContent = "center";
+const scoreP = document.createElement("p");
+scoreP.classList.add("score");
+scoreP.innerHTML = `Score: ${score}`;
+
+scoreDiv.append(scoreP);
+body.append(scoreDiv);
