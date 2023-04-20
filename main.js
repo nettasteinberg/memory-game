@@ -55,15 +55,15 @@ const getCardBackByIndex = (index) => getCardInnerByIndex(index).querySelector("
 
 
 /* Adding 'Randomize Board' button */
-const div = document.createElement("div");
-div.style.display = "flex";
-div.style.justifyContent = "center";
+const RandomizeButtonDiv = document.createElement("div");
+RandomizeButtonDiv.style.display = "flex";
+RandomizeButtonDiv.style.justifyContent = "center";
 const randomizeBoardButton = document.createElement("button");
 randomizeBoardButton.classList.add("button");
 randomizeBoardButton.innerText = "Randomize Board";
 
-div.append(randomizeBoardButton);
-body.append(div);
+RandomizeButtonDiv.append(randomizeBoardButton);
+body.append(RandomizeButtonDiv);
 
 randomizeBoardButton.addEventListener("click", function(event) {
     let newCardArray = [];
