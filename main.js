@@ -11,7 +11,7 @@ let numberOfFlippedCards = 0;
 let indicesOfFlippedCards = [-1, -2];
 const playersScores = [0, 0];
 let playerTurn = 0;
-// let score = 0;
+let matchedPairs = 0;
 
 const cards = document.querySelectorAll(".card");
 cards.forEach(function(card) {
@@ -38,10 +38,22 @@ const matchFound = () => {
     resetVariables();
     playersScores[playerTurn]++;
     refreshScore();
+    matchedPairs++;
+    if (matchedPairs === cardsArray.length / 2) {
+        const winnerIndex = playersScores[0] > playersScores[1] ? 0 : playersScores[0] < playersScores[1] ? 1 : 2;
+        switch(winnerIndex) {
+            case 0:
+            case 1:
+                gameOver.innerHTML = `Player ${playerTurn + 1} is the winner`;
+                break;
+            case 2:
+                gameOver.innerHTML = "It's a tie!";
+        }
+        gameOver.style.backgroundColor = "red";
+    }
 }
 
 const refreshScore = () => {
-    // debugger
     const playerScores = Array.prototype.slice.call(document.querySelectorAll('.score'));
     for (let i = 0; i < playerScores.length; i++) {
         playerScores[i].innerHTML = `Player ${i+1} score: ${playersScores[i]}`;
@@ -112,6 +124,7 @@ randomizeBoardButton.addEventListener("click", function(event) {
     refreshScore();
     playerTurn = 0;
     refreshTurnDisplay();
+    matchedPairs = 0;
 })
 
 
@@ -140,3 +153,12 @@ body.append(playerTurnDiv);
 const refreshTurnDisplay = function() {
     turn.innerHTML = `Player ${playerTurn + 1} turn`;
 }
+
+
+/* Game Over */
+const gameOverDiv = document.createElement("div");
+gameOverDiv.style.display = "flex";
+gameOverDiv.style.justifyContent = "center";
+const gameOver = document.createElement("h1");
+gameOverDiv.append(gameOver);
+body.append(gameOverDiv);
