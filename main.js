@@ -62,6 +62,7 @@ const noMatch = function() {
     })
     resetVariables();
     playerTurn = playerTurn === 0 ? 1 : 0;
+    refreshTurnDisplay();
 }
 
 const contentOfCard = (index) => getCardBackByIndex(index).innerHTML;
@@ -110,6 +111,7 @@ randomizeBoardButton.addEventListener("click", function(event) {
     }
     refreshScore();
     playerTurn = 0;
+    refreshTurnDisplay();
 })
 
 
@@ -126,3 +128,15 @@ scorePlayer2.innerHTML = `Player 2 score: ${playersScores[1]}`;
 
 scoreDiv.append(scorePlayer1, scorePlayer2);
 body.append(scoreDiv);
+
+const playerTurnDiv = document.createElement("div");
+playerTurnDiv.style.display = "flex";
+playerTurnDiv.style.justifyContent = "center";
+const turn = document.createElement("h1");
+turn.innerHTML = `Player ${playerTurn + 1}'s turn`;
+playerTurnDiv.append(turn);
+body.append(playerTurnDiv);
+
+const refreshTurnDisplay = function() {
+    turn.innerHTML = `Player ${playerTurn + 1} turn`;
+}
